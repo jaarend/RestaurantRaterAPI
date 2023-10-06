@@ -52,9 +52,9 @@ public class RestaurantController : ControllerBase
     //PUT Endpoint (Update)
     [HttpPut]
     [Route("{id}")]
-    public async Task<IActionResult> UpdateRestaurant([FromForm] RestaurantEdit model, [FromRoute] int id)
+    public async Task<IActionResult> PutRestaurant([FromForm] Restaurant request)
     {
-        var oldRestaurant = await _context.Restaurants.FindAsync(id);
+        var oldRestaurant = await _context.Restaurants.FindAsync(request.Id);
         if(oldRestaurant == null)
         {
             return NotFound();
@@ -63,14 +63,19 @@ public class RestaurantController : ControllerBase
         {
             return BadRequest();
         }
-        if(!string.IsNullOrEmpty(model.Name))
+
+        Restaurant? restaurant = await _context.Restaurants.FindAsync(request.Id);
+
+        if (restaurant is null)
         {
-            oldRestaurant.Name = model.Name;
+            return NotFound();
         }
-        if(!string.IsNullOrEmpty(model.Location))
-        {
-            oldRestaurant.Location = model.Location;
-        }
+
+        restaurant.Name = request.Name;
+        restaurant.Location = request.Location;
+
+        _context.Restaurants.Update(restaurant);
+
         await _context.SaveChangesAsync();
         return Ok();
     } 
