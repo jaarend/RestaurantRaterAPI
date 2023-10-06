@@ -9,7 +9,8 @@ public class Restaurant
 
     [Required] //NOT NULL
     [MaxLength(100)] //NVARCHAR (100)
-    public string Name { get; set; } = string.Empty
+    public string Name { get; set; } = string.Empty;
+
     [Required, MaxLength(100)]
-    public string Location { get; set; } = string.Empty
-}
+    public string Location { get; set; } = string.Empty;
+};
