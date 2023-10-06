@@ -78,5 +78,20 @@ public class RestaurantController : ControllerBase
 
         await _context.SaveChangesAsync();
         return Ok();
-    } 
+    }
+
+    //DELETE endpoint
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteRestaurant(int id)
+    {
+        var restaurant = await _context.Restaurants.FindAsync(id);
+        if (restaurant is null)
+        {
+            return NotFound();
+        }
+
+        _context.Restaurants.Remove(restaurant);
+        await _context.SaveChangesAsync();
+        return Ok();
+    }
 }
