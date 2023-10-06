@@ -15,6 +15,20 @@ public class RestaurantController : ControllerBase
     {
         _context = context;
     }
+    //Async POST Endpoint
+    [HttpPost]
+    public async Task<IActionResult> PostRestaurant([FromBody] Restaurant request)
+    {
+        if (ModelState.IsValid)
+        {
+            _context.Restaurants.Add(request);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        return BadRequest(ModelState);
+    }
+
 
     //Async GET Endpoint
     public async Task<IActionResult> GetRestaurants()
