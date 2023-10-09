@@ -17,4 +17,22 @@ public class RatingController : ControllerBase
         _logger = logger;
         _context = context;
     }
+
+    [HttpPost]
+    public async Task<IActionResult> RateRestaurant([FromBody] Rating model)
+    {
+        if(!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        _context.Ratings.Add(new Rating() {
+            Score = model.Score,
+            RestaurantId = model.RestaurantId,
+        });
+        
+        await _context.SaveChangesAsync();
+        
+        return Ok();
+    }
 }
