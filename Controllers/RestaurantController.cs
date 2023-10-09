@@ -34,13 +34,13 @@ public class RestaurantController : ControllerBase
     public async Task<IActionResult> GetRestaurants()
     {
 
-        List<Restaurant> restaurants = await _context.Restaurants.ToListAsync();
+        List<Restaurant> restaurants = await _context.Restaurants.Include(r => r.Ratings).ToListAsync();
         return Ok(restaurants);
     }
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetRestaurantById(int id)
     {
-        Restaurant? restaurant = await _context.Restaurants.FindAsync(id);
+        Restaurant? restaurant = await _context.Restaurants.Include(r => r.Ratings).FirstOrDefaultAsync(r => r.Id == id);
         if (restaurant is null)
         {
             return NotFound();
