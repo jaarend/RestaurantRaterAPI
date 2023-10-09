@@ -34,8 +34,15 @@ public class RestaurantController : ControllerBase
     public async Task<IActionResult> GetRestaurants()
     {
 
-        List<Restaurant> restaurants = await _context.Restaurants.Include(r => r.Ratings).ToListAsync();
-        return Ok(restaurants);
+        var restaurants = await _context.Restaurants.Include(r => r.Ratings).ToListAsync();
+        List<RestaurantListItem> restaurantList = restaurants.Select(r => new RestaurantListItem() {
+            Id = r.Id,
+            Name = r.Name,
+            Location = r.Location,
+            AverageRating = r.AverageRating,
+        }).ToList();
+
+        return Ok(restaurantList);
     }
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetRestaurantById(int id)
